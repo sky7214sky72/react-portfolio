@@ -16,15 +16,54 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [19.x]
+        node-version: [ 19.x ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Create setupProxy.js
+        run: echo "${{ secrets.PROXY_CONFIG }}" > src/setupProxy.js
+      - run: npm ci
+      - run: npm run build --if-present
+        # Docker 이미지 빌드
+      - name: docker image build
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/react-app .
+
+        # DockerHub 로그인
+      - name: docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.REACT_DOCKER_USERNAME }}
+          password: ${{ secrets.REACT_DOCKER_PASSWORD }}
+
+        # Docker Hub 이미지 푸시
+      - name: docker Hub push
+        run: docker push ${{ secrets.REACT_DOCKER_USERNAME }}/react-app:latest
+
+  # 위 과정에서 푸시한 이미지를 ec2에서 풀받아서 실행시키는 과정
+  run-docker-image-on-ec2:
+    # build-docker-image (위)과정이 완료되어야 실행됩니다.
+    needs: build-docker-image
+    runs-on: [ self-hosted, react ]
+
+    steps:
+      # 1. 최신 이미지를 풀받습니다
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.REACT_DOCKER_USERNAME }}/react-app
+
+      # 2. 기존의 컨테이너를 중지시킵니다
+      - name: docker stop container
+        run: sudo docker stop react-app 2>/dev/null || true
+
+      # 3. 미사용 이미지를 정리합니다
+      - name: delete old docker image
+        run: sudo docker system prune -f
+
+      # 4. 최신 이미지를 컨테이너화하여 실행시킵니다
+      - name: docker run new container
+        run: docker run -d -p 3000:3000 --name react-app ${{ secrets.DOCKER_USERNAME }}/react-app
