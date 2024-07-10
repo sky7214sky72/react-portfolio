@@ -51,7 +51,7 @@ jobs:
     steps:
       # DockerHub 로그인
       - name: Log in to Docker Hub
-        run: echo ${{ secrets.REACT_DOCKER_PASSWORD }} | docker login -u ${{ secrets.REACT_DOCKER_USERNAME }} --password-stdin
+        run: sudo echo ${{ secrets.REACT_DOCKER_PASSWORD }} | docker login -u ${{ secrets.REACT_DOCKER_USERNAME }} --password-stdin
       # 1. 최신 이미지를 풀받습니다
       - name: docker pull
         run: sudo docker pull ${{ secrets.REACT_DOCKER_USERNAME }}/react-app
