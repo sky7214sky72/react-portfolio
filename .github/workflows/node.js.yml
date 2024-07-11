@@ -55,7 +55,9 @@ jobs:
 
       # 2. 기존의 컨테이너를 중지시킵니다
       - name: docker stop container
-        run: sudo docker stop react_container 2>/dev/null || true | sudo docker stop nginx_container 2>/dev/null || true
+        run:
+          sudo docker stop react_container 2>/dev/null || true 
+          sudo docker stop nginx_container 2>/dev/null || true
 
       # 3. 미사용 이미지를 정리합니다
       - name: delete old docker image
