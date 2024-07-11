@@ -3,7 +3,7 @@ import React from 'react';
 const Header = ({ activeTab, setActiveTab }) => {
     return (
         <header>
-            <h1>pWRC+, pOPS+</h1>
+            <h1>pWRC+, pOPS+ (데이터는 매일 00시에 갱신됩니다)</h1>
             <nav>
                 {/*<button*/}
                 {/*    className={activeTab === 'pitchers' ? 'active' : ''}*/}
