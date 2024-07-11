@@ -1,4 +1,4 @@
-function BattersTable({players}) {
+function BattersTable({hitters}) {
     return (
         <table>
             <thead>
@@ -10,12 +10,12 @@ function BattersTable({players}) {
             </tr>
             </thead>
             <tbody>
-            {players.map(player => (
-                <tr key={player.name}>
-                    <td>{player.teamName}</td>
-                    <td>{player.name}</td>
-                    <td>{player.wrcPlus}</td>
-                    <td>{player.opsPlus}</td>
+            {hitters.map(hitters => (
+                <tr key={hitters.name}>
+                    <td>{hitters.teamName}</td>
+                    <td>{hitters.name}</td>
+                    <td>{hitters.wrcPlus}</td>
+                    <td>{hitters.opsPlus}</td>
                 </tr>
             ))}
             </tbody>
