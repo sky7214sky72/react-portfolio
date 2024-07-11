@@ -67,6 +67,5 @@ jobs:
 
       # 4. 최신 이미지를 컨테이너화하여 실행시킵니다
       - name: docker run new container
-        run: |
-          cd /home/opc/react-docker/ 
-          sudo docker-compose up -d
+        working-directory: /home/opc/react-docker
+        run: sudo docker-compose up -d
