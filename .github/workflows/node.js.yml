@@ -52,9 +52,6 @@ jobs:
       # DockerHub 로그인
       - name: Log in to Docker Hub
         run: sudo echo ${{ secrets.REACT_DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.REACT_DOCKER_USERNAME }} --password-stdin
-      # 1. 최신 이미지를 풀받습니다
-      - name: docker pull
-        run: sudo docker pull ${{ secrets.REACT_DOCKER_USERNAME }}/react-app
 
       # 2. 기존의 컨테이너를 중지시킵니다
       - name: docker stop container
@@ -63,6 +60,10 @@ jobs:
       # 3. 미사용 이미지를 정리합니다
       - name: delete old docker image
         run: sudo docker system prune -f
+
+      # 1. 최신 이미지를 풀받습니다
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.REACT_DOCKER_USERNAME }}/react-app
 
       # 4. 최신 이미지를 컨테이너화하여 실행시킵니다
       - name: docker run new container
