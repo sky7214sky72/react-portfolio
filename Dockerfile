@@ -11,11 +11,6 @@ COPY . ./
 
 RUN npm run build
 
-# 단계 2: 실행 단계
-FROM nginx:alpine
-
-COPY --from=build /app/build /usr/share/nginx/html
-
 EXPOSE 4000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]
