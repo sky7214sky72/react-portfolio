@@ -1,6 +1,5 @@
 # 2024시즌 KBO 투수 / 타자 성적 조회 사이트
 
-## https://portmetricsfolio.site/
 
 # 기술스택
 ## React, Python, Spring Boot, Docker, Github Actions, PostgreSQL
